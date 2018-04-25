@@ -94,7 +94,7 @@
   <textarea name="set_text" id="header_set" class="form-control" rows="5">
 
   </textarea>
-  <input type="hidden" value="<%= doc_section %>_html">
+  <input name="type_string" type="hidden" value="<%= doc_section %>_html">
   <br>
   <p><button id="set_text" class="btn btn-success">Add</button>&nbsp;<button class="btn btn-default">Reset</button></p>
 </form>
@@ -103,27 +103,33 @@
 <script type="text/temlate" id="input_form">
 <form name="hero_text" enctype="application/x-www-form-urlencoded">
   <div class="row"
-    <div class="col-xs-12">
+    <div class="col-xs-1"></div>
+    <div class="col-xs-10">
       <input name="hero_img" id="hero_img" class="form-control" placeholder="Hero Image">
     </div>
+    <div class="col-xs-1"></div>
   </div>
   <div class="row"
-    <div class="col-xs-12">
+    <div class="col-xs-1"></div>
+    <div class="col-xs-10">
       <input name="hero_alt" id="hero_alt" class="form-control" placeholder="Hero Alt">
     </div>
+    <div class="col-xs-1"></div>
   </div>
   <div class="row"
-    <div class="col-xs-3"></div>
-    <div class="col-xs-6">
+    <div class="col-xs-1"></div>
+    <div class="col-xs-10">
       <input name="bg_color" id="bg_color" class="form-control" placeholder="BG Color">
     </div>
-    <div class="col-xs-3"></div>
+    <div class="col-xs-1"></div>
   </div>
   <div class="row"
-    <div class="col-xs-12">
-      <br>
+    <div class="col-xs-1"></div>
+    <div class="col-xs-10">
+      <input name="type_string" type="hidden" value="<%= doc_section %>_html">
       <button id="hero_add" class="btn btn-success">Add</button>&nbsp;<button class="btn btn-default">Reset</button>
     </div>
+    <div class="col-xs-1"></div>
   </div>
 </form>
 </script>
@@ -184,6 +190,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.0/underscore.js" integrity="sha256-Uap2tTK6UhgsRjhuW9LfFVED06vNSTAMfstr3H2Tols=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
+<script src="scripts/skidoosh_app.js"></script>
 <script>
 
 /*
@@ -214,102 +221,6 @@ var textFile = null,
   }, false);
 })();
 */
-
-var email_maker_app = {
-
-  settings : {
-    'header' : '',
-    'footer' : '',
-    'body' : []
-  },
-
-  data : [],
-
-  activateModal : function(navText){
-    console.log('n text',navText);
-    $('#utility_modal').modal('show');
-  },
-
-  buildModal : function (navText) {
-    var self = this;
-    console.log('navText',navText);
-    $('.modal-title,.modal-body').empty();
-    if( navText.toLowerCase() == 'header' || navText.toLowerCase() == 'footer' ) {
-      textAreaTmpl = _.template($('#textarea_form').html())
-      $('.modal-body').html(textAreaTmpl);
-      this.activateModal(navText);
-      this.bindFormSubmit(navText);
-    } else if( navText.toLowerCase() == 'body' ) {
-      inputTmpl = _.template($('#input_form').html())
-      $('.modal-body').html(inputTmpl);
-      this.activateModal(navText);
-      this.bindFormSubmit(navText);
-    } else {
-      alert('what\'t you do fool');
-    }
-  },
-
-  bindFormSubmit : function (navText) {
-    $('.modal-body form button:nth-of-type(1)').on('click',function(e){
-      e.preventDefault();
-      e.stopPropagation();
-      alert('click');
-      return false;
-    });
-  },
-
-  bindMenu : function() {
-    var self = this;
-    $('ul.nav li a').on('click',function(e){
-      self.buildModal($(this).text());
-    });
-  },
-
-  trayToggle : function(){
-    var self = this;
-    $('#content_title').on('click',function(){
-      console.log('margin right',$('#content_tray').css('margin-left'));
-      if( $('#content_tray').css('margin-left') == '-30px' ) {
-        $('#content_tray').animate({
-           'margin-left':'-350px'
-        },1000).promise().done(function(){
-          $('#content_title span').removeClass('glyphicon glyphicon-chevron-left');
-          $('#content_title span').addClass('glyphicon glyphicon-chevron-right');
-        });
-      } else if ( $('#content_tray').css('margin-left') == '-350px' ) {
-        $('#content_tray').animate({
-          'margin-left':'-30px'
-        },1000).promise().done(function(){
-          $('#content_title span').removeClass('glyphicon glyphicon-chevron-right');
-          $('#content_title span').addClass('glyphicon glyphicon-chevron-left');
-        });;
-      }
-    });
-  },
-
-  adjustWorkspace : function () {
-    $('.container,#content_tray,#content_title,#content_body').css({'height':window.innerHeight + 'px'});
-    $('#workspace').css({
-        'height': ( window.innerHeight - ( $('.row:nth-of-type(1)').height() + $('.row:nth-of-type(3)').height() ) ) + 'px'
-    });
-  },
-
-  bindResize : function () {
-    var self = this;
-    $(window).resize(function(){
-      self.adjustWorkspace();
-    });
-  },
-
-  init : function () {
-    this.bindMenu();
-    this.trayToggle();
-    this.adjustWorkspace();
-    this.bindResize();
-  }
-
-}
-
 
 $(document).ready(function(){
   $('.container,#content_tray,#content_title,#content_body').css({'height':window.innerHeight + 'px'});
