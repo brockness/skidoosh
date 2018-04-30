@@ -69,6 +69,13 @@
       font-size: 11px;
     }
 
+    #payload {
+      width: 100%;
+      margin: 0 auto;
+      padding: 0;
+      border: 0 none transparent;
+    }
+
   </style>
 </head>
 <body>
@@ -102,28 +109,39 @@
 
 <script type="text/temlate" id="input_form">
 <form name="hero_text" enctype="application/x-www-form-urlencoded">
-  <div class="row"
+  <div class="row">
     <div class="col-xs-1"></div>
     <div class="col-xs-10">
-      <input name="hero_img" id="hero_img" class="form-control" placeholder="Hero Image">
+      <input type="text" name="img_link" id="img_link" class="form-control" placeholder="Image Link">
+      <br>
     </div>
     <div class="col-xs-1"></div>
   </div>
-  <div class="row"
+  <div class="row">
     <div class="col-xs-1"></div>
     <div class="col-xs-10">
-      <input name="hero_alt" id="hero_alt" class="form-control" placeholder="Hero Alt">
+      <input type="text" name="hero_img" id="hero_img" class="form-control" placeholder="Hero Image">
+      <br>
     </div>
     <div class="col-xs-1"></div>
   </div>
-  <div class="row"
+  <div class="row">
     <div class="col-xs-1"></div>
     <div class="col-xs-10">
-      <input name="bg_color" id="bg_color" class="form-control" placeholder="BG Color">
+      <input type="text" name="hero_alt" id="hero_alt" class="form-control" placeholder="Hero Alt">
+      <br>
     </div>
     <div class="col-xs-1"></div>
   </div>
-  <div class="row"
+  <div class="row">
+    <div class="col-xs-1"></div>
+    <div class="col-xs-10">
+      <input type="text" name="bg_color" id="bg_color" class="form-control" placeholder="BG Color">
+      <br>
+    </div>
+    <div class="col-xs-1"></div>
+  </div>
+  <div class="row">
     <div class="col-xs-1"></div>
     <div class="col-xs-10">
       <input name="type_string" type="hidden" value="<%= doc_section %>_html">
@@ -137,11 +155,11 @@
 <script type="text/template" id="hero-tmpl">
 <tr><!-- Image link in next line below -->
   <td valign="top" bgcolor="<%= bg_color %>" style="border-collapse: collapse; mso-table-lspace: 0; mso-table-rspace: 0;">
-  <% if( img_link == '' ) { %>
-    <img style="display: block; border: 0px;" src="<%= img_src %>" border="0" alt="<%= img_alt %>" width="600" class="imageresize" />
+  <% if( img_link  == '' ) { %>
+    <img style="display: block; border: 0px;" src="<%= hero_img %>" border="0" alt="<%= hero_alt %>" width="600" class="imageresize" />
   <% } else { %>
     <a href="<%= img_link %>" target="_blank">
-      <img style="display: block; border: 0px;" src="<%= img_src %>" border="0" alt="<%= img_alt %>" width="600" class="imageresize" />
+      <img style="display: block; border: 0px;" src="<%= hero_img %>" border="0" alt="<%= hero_alt %>" width="600" class="imageresize" />
     </a>
   <% } %>
   </td>
@@ -157,7 +175,7 @@
         <li class="text-center"><a href="javascript:void(0);">Header</a></li>
         <li class="text-center"><a href="javascript:void(0);">Body</a></li>
         <li class="text-center"><a href="javascript:void(0);">Footer</a></li>
-        <li class="text-center"><a href="javascript:void(0);">Menace</a></li>
+        <li class="text-center"><a href="javascript:void(0);">Download</a></li>
       </ul>
     </div>
     <div class="col-xs-3">
@@ -166,7 +184,7 @@
   <div class="row">
     <div class="col-xs-1"></div>
     <div class="col-xs-10" id="workspace">
-
+      <iframe id="payload"></iframe>
     </div>
     <div class="col-xs-1"></div>
   </div>
@@ -190,7 +208,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.0/underscore.js" integrity="sha256-Uap2tTK6UhgsRjhuW9LfFVED06vNSTAMfstr3H2Tols=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
-<script src="scripts/skidoosh_app.js"></script>
+<script src="scripts/email_app.js"></script>
 <script>
 
 /*

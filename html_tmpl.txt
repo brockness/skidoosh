@@ -1,0 +1,57 @@
+<!-- header -->
+<!doctype html>
+<html>
+<head>
+
+<meta charset="utf-8">
+
+<title></title>
+
+<style>
+
+body {
+  background-color: #ffffff;
+  color: #000000;
+  font-family: Arial, sans-serif;
+}
+
+.small-text {
+  font-size: 12px;
+}
+
+</style>
+</head>
+<body>
+<table width="100%" align="center" cellspacing="0" cellpadding="0" class="small-text">
+  <tr>
+    <td>
+      <center>
+        <table width="600" cellspacing="0" cellpadding="0" style="margin: 0 auto; max-width: 600px; width: 100%; padding: 0;">
+          <tr>
+            <td width="15%" align="center" style="margin: 0; padding: 0;">
+                logo
+            </td>
+            <td width="70%" align="center" style="margin: 0; padding: 0;">
+
+            </td>
+            <td width="15%" align="center" style="margin: 0; padding: 0;">
+              Lorem<br>
+              Ipsum<br>
+            </td>
+          </tr>
+<!-- end body -->
+
+<!-- footer -->
+          <tr>
+            <td colspan="3" width="100%" align="center" style="margin: 0; padding: 0;">
+              &copy; this infernal contraption
+            </td>
+          </tr>
+        </table>
+      </center>
+    <td>
+  </tr>
+</table>
+</body>
+</html>
+<!-- end footer -->

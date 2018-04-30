@@ -4,19 +4,41 @@ var email_maker_app = {
   settings : {
     'header' : '',
     'footer' : '',
-    'body' : []
+    'paths' : {
+      'local' : '',
+      'dev' : '',
+      'bigfoot' : ''
+    }
   },
 
-  data : [],
+  data : [], // body or hero data
 
-  activateModal : function(navText){
-    console.log('n text',navText);
+  renderEmail : function () {
+    if( this.settings.header != '' && this.settings.footer != '' && this.data.length > 0 ) {
+      payloadStr = this.settings.header;
+      for( i = 0; i < this.data.length; i++ ) {
+        heroTmpl = _.template($('#hero-tmpl').html()) ; // underscore js template utility
+        console.log(heroTmpl(this.data[i]));
+        payloadStr += heroTmpl(this.data[i]);
+      }
+      payloadStr += this.settings.footer;
+      $('#workspace').empty().append('<iframe id="payload"></iframe>');
+      document.getElementById('payload').contentWindow.document.write(payloadStr);
+    } else {
+      return false;
+    }
+  },
+
+  dismissModal : function(){
+    $('#utility_modal').modal('hide');
+  },
+
+  activateModal : function(){
     $('#utility_modal').modal('show');
   },
 
   buildModal : function (navText) {
     var self = this;
-    console.log('navText',navText);
     $('.modal-title,.modal-body').empty();
     if( navText.toLowerCase() == 'header' || navText.toLowerCase() == 'footer' ) {
       textAreaTmpl = _.template($('#textarea_form').html())
@@ -40,30 +62,54 @@ var email_maker_app = {
     } else if ( navText.toLowerCase() == 'body' ){
       this.settings.formName = 'hero';
     } else {
-      console.log('t',navText.toLowerCase());
       this.settings.formName = 'test';
     }
     $('.modal-body form button:nth-of-type(1)').on('click',function(e){
-      $('.modal-body form').submit(function(f){
-        f.preventDefault();
-        f.stopPropagation();
-        dataObj = $(this).serialize();
-        console.log('d obj',dataObj);
-      });
+      e.preventDefault();
+      if( navText.toLowerCase() == 'header' || navText.toLowerCase() == 'footer' ) {
+        if( navText.toLowerCase() == 'header') {
+          self.settings.header = $($('textarea')[0]).val();
+        } else if ( navText.toLowerCase() == 'footer' ) {
+          self.settings.footer = $($('textarea')[0]).val();
+        }
+      } else if ( navText.toLowerCase() == 'body' ) {
+        inputObj = {};
+        $('input[type="text"]').each(function(){
+          inputObj[$(this).attr('name').toLowerCase()] = $(this).val();
+        });
+        self.data.push(inputObj);
+        self.dismissModal()
+        self.renderEmail();
+      }
     });
+    $('.modal-body form button:nth-of-type(1)').on('click',function(){
+      self.dismissModal();
+    });
+  },
+
+  downloadMarkup : function () {
+    if( this.settings.header != '' && this.settings.footer != '' && this.data.length > 0 ) {
+      payload = document.getElementById('payload');
+      payload.contentDocument? payload.contentDocument: payload.contentWindow.document;
+    } else {
+      alert('set header, footer and at least one hero TR to download');
+    }
   },
 
   bindMenu : function() {
     var self = this;
     $('ul.nav li a').on('click',function(e){
-      self.buildModal($(this).text());
+      if( $(this).text().toLowerCase() != 'header' || $(this).text().toLowerCase() != 'footer' || $(this).text().toLowerCase() != 'body' ) {
+        self.buildModal($(this).text());
+      } else {
+
+      }
     });
   },
 
   trayToggle : function(){
     var self = this;
     $('#content_title').on('click',function(){
-      console.log('margin right',$('#content_tray').css('margin-left'));
       if( $('#content_tray').css('margin-left') == '-30px' ) {
         $('#content_tray').animate({
            'margin-left':'-350px'
