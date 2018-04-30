@@ -74,10 +74,21 @@ var email_maker_app = {
         }
       } else if ( navText.toLowerCase() == 'body' ) {
         inputObj = {};
+        self.settings.formTest = 0;
         $('input[type="text"]').each(function(){
-          inputObj[$(this).attr('name').toLowerCase()] = $(this).val();
+          if( $(this).val() != '' ) {
+            inputObj[$(this).attr('name').toLowerCase()] = $(this).val();
+          } else {
+            if( $(this).attr('name') != 'img_link' ) {
+              self.settings.formTest = 1;
+            }
+          }
         });
-        self.data.push(inputObj);
+        if( self.settings.formTest != 1 ) {
+          self.data.push(inputObj);
+        } else {
+          alert('please fill out the form');
+        }
         self.dismissModal()
         self.renderEmail();
       }
@@ -130,7 +141,7 @@ var email_maker_app = {
 
   adjustWorkspace : function () {
     $('.container,#content_tray,#content_title,#content_body').css({'height':window.innerHeight + 'px'});
-    $('#workspace').css({
+    $('#workspace,#payload').css({
         'height': ( window.innerHeight - ( $('.row:nth-of-type(1)').height() + $('.row:nth-of-type(3)').height() ) ) + 'px'
     });
   },
