@@ -44,7 +44,7 @@ body {
 <!-- footer -->
           <tr>
             <td colspan="3" width="100%" align="center" style="margin: 0; padding: 0;">
-              &copy; this infernal contraption
+              <p>payload</p>
             </td>
           </tr>
         </table>

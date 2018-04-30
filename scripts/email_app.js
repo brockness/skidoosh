@@ -23,6 +23,7 @@ var email_maker_app = {
       }
       payloadStr += this.settings.footer;
       $('#workspace').empty().append('<iframe id="payload"></iframe>');
+      this.adjustWorkspace();
       document.getElementById('payload').contentWindow.document.write(payloadStr);
     } else {
       return false;
@@ -114,7 +115,11 @@ var email_maker_app = {
       if( $(this).text().toLowerCase() != 'header' || $(this).text().toLowerCase() != 'footer' || $(this).text().toLowerCase() != 'body' ) {
         self.buildModal($(this).text());
       } else {
-
+        if ( self.settings.header != '' && self.settings.footer != '' && self.data.length > 0 ) {
+          self.downloadMarkup();
+        } else {
+          alert('not ready to download html yet');
+        }
       }
     });
   },
