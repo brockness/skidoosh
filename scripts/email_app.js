@@ -102,6 +102,7 @@ var email_maker_app = {
     if( this.settings.header != '' && this.settings.footer != '' && this.data.length > 0 ) {
       payload = document.getElementById('payload');
       payload.contentDocument? payload.contentDocument: payload.contentWindow.document;
+      console.log(payload);
     } else {
       alert('set header, footer and at least one hero TR to download');
     }
