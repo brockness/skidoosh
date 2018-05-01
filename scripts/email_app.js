@@ -2,11 +2,12 @@
 var email_maker_app = {
 
   settings : {
-    'header' : '',
-    'footer' : '',
-    'paths' : {
-      'local' : '',
-      'dev' : '',
+    'interval' : '',
+      'header' : '',
+      'footer' : '',
+       'paths' : {
+        'local' : '',
+          'dev' : '',
       'bigfoot' : ''
     }
   },
@@ -14,17 +15,20 @@ var email_maker_app = {
   data : [], // body or hero data
 
   renderEmail : function () {
+    var self = this;
     if( this.settings.header != '' && this.settings.footer != '' && this.data.length > 0 ) {
       payloadStr = this.settings.header;
       for( i = 0; i < this.data.length; i++ ) {
         heroTmpl = _.template($('#hero-tmpl').html()) ; // underscore js template utility
-        console.log(heroTmpl(this.data[i]));
         payloadStr += heroTmpl(this.data[i]);
       }
       payloadStr += this.settings.footer;
       $('#workspace').empty().append('<iframe id="payload"></iframe>');
-      this.adjustWorkspace();
       document.getElementById('payload').contentWindow.document.write(payloadStr);
+      this.settings.interval = setTimeout(function(){
+        $('#payload').height($('#workspace').height());
+        clearInterval(self.settings.interval);
+      },100);
     } else {
       return false;
     }
@@ -52,7 +56,7 @@ var email_maker_app = {
       this.activateModal(navText);
       this.bindFormBtns(navText);
     } else {
-      alert('what\'t you do fool');
+      // alert('what\'t you do fool');
     }
   },
 
@@ -89,6 +93,7 @@ var email_maker_app = {
           self.data.push(inputObj);
         } else {
           alert('please fill out the form');
+          return false;
         }
         self.dismissModal()
         self.renderEmail();
@@ -101,9 +106,17 @@ var email_maker_app = {
 
   downloadMarkup : function () {
     if( this.settings.header != '' && this.settings.footer != '' && this.data.length > 0 ) {
-      payload = document.getElementById('payload');
-      payload.contentDocument? payload.contentDocument: payload.contentWindow.document;
-      console.log(payload);
+      head = document.getElementById('payload').contentWindow.document.head;
+      body = document.getElementById('payload').contentWindow.document.body;
+      docObj = document.getElementById('payload').contentWindow.document;
+      console.log(docObj);
+      payloadStr = '<!doctype><html><head>' + $(head).html() + '<head><body>' + $(body).html() + '</body></html>';
+      console.log('head',$(head).html());
+      // emailDoc = new Blob([payloadStr], {type: 'text/html'});
+      anchorObj = document.createElement('a')
+      anchorObj.href = payloadStr;
+      anchorObj.download = 'example_test.html';
+      anchorObj.click();
     } else {
       alert('set header, footer and at least one hero TR to download');
     }
@@ -112,14 +125,14 @@ var email_maker_app = {
   bindMenu : function() {
     var self = this;
     $('ul.nav li a').on('click',function(e){
-      if( $(this).text().toLowerCase() != 'header' || $(this).text().toLowerCase() != 'footer' || $(this).text().toLowerCase() != 'body' ) {
-        self.buildModal($(this).text());
-      } else {
+      if( $(this).text().toLowerCase() != 'header' && $(this).text().toLowerCase() != 'footer' && $(this).text().toLowerCase() != 'body' ) {
         if ( self.settings.header != '' && self.settings.footer != '' && self.data.length > 0 ) {
           self.downloadMarkup();
         } else {
           alert('not ready to download html yet');
         }
+      } else {
+        self.buildModal($(this).text());
       }
     });
   },
@@ -147,7 +160,7 @@ var email_maker_app = {
 
   adjustWorkspace : function () {
     $('.container,#content_tray,#content_title,#content_body').css({'height':window.innerHeight + 'px'});
-    $('#workspace,#payload').css({
+    $('#workspace').css({
         'height': ( window.innerHeight - ( $('.row:nth-of-type(1)').height() + $('.row:nth-of-type(3)').height() ) ) + 'px'
     });
   },
