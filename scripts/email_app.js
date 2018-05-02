@@ -35,6 +35,7 @@ var email_maker_app = {
   },
 
   dismissModal : function(){
+    $('.modal-body').find('form').remove();
     $('#utility_modal').modal('hide');
   },
 
@@ -54,7 +55,10 @@ var email_maker_app = {
       inputTmpl = _.template($('#input_form').html())
       $('.modal-body').html(inputTmpl({'doc_section':navText.toLowerCase()}));
       this.activateModal(navText);
-      this.bindFormBtns(navText);
+      this.settings.interval = setTimeout(function(){
+        self.bindFormBtns(navText);
+        clearInterval(self.settings.interval);
+      },100);
     } else {
       // alert('what\'t you do fool');
     }
@@ -69,8 +73,9 @@ var email_maker_app = {
     } else {
       this.settings.formName = 'test';
     }
-    $('.modal-body form button:nth-of-type(1)').on('click',function(e){
+    $('#submit_btn').on('click',function(e){
       e.preventDefault();
+      e.stopPropagation();
       if( navText.toLowerCase() == 'header' || navText.toLowerCase() == 'footer' ) {
         if( navText.toLowerCase() == 'header') {
           self.settings.header = $($('textarea')[0]).val();
@@ -95,13 +100,36 @@ var email_maker_app = {
           alert('please fill out the form');
           return false;
         }
+      }
+      if( $('#' + navText.toLowerCase() + '_set').val() != '' ) {
         self.dismissModal()
         self.renderEmail();
+      } else {
+        alert('please enter markup');
       }
     });
-    $('.modal-body form button:nth-of-type(1)').on('click',function(){
+    $('#reset_btn').on('click',function(e){
+      e.preventDefault();
+      e.stopPropagation();
       self.dismissModal();
     });
+    $('#html_tmpl').on('click',function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      console.log(navText.toLowerCase());
+      if( navText.toLowerCase() != 'body' ) {
+        self.populateForm(navText);
+      } else {
+        console.log('body 122',navText.toLowerCase());
+        self.settings.interval = setTimeout(function(){
+          $('#hero_img').val("http://via.placeholder.com/600x150");
+        },100);
+      }
+    });
+  },
+
+  populateForm : function (navText) {
+    $('#' + navText.toLowerCase() + '_set').val($('#'+ navText.toLowerCase() +'_tmpl').text());
   },
 
   downloadMarkup : function () {
@@ -124,7 +152,7 @@ var email_maker_app = {
 
   bindMenu : function() {
     var self = this;
-    $('ul.nav li a').on('click',function(e){
+    $('ul#main li a').on('click',function(e){
       if( $(this).text().toLowerCase() != 'header' && $(this).text().toLowerCase() != 'footer' && $(this).text().toLowerCase() != 'body' ) {
         if ( self.settings.header != '' && self.settings.footer != '' && self.data.length > 0 ) {
           self.downloadMarkup();
