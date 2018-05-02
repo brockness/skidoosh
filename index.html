@@ -193,7 +193,6 @@
 <script type="text/template" id="hero-tmpl">
 <tr><!-- Image link in next line below -->
   <td valign="top" bgcolor="<%= bg_color %>" style="border-collapse: collapse; mso-table-lspace: 0; mso-table-rspace: 0;">
-  <% console.log('tmpl log', img_link); %>
   <% if( img_link  == '' ) { %>
     <img style="display: block; border: 0px;" src="<%= hero_img %>" border="0" alt="<%= hero_alt %>" width="600" class="imageresize" />
   <% } else { %>
@@ -218,18 +217,7 @@
       </ul>
     </div>
     <div class="col-xs-3">
-      <ul id="options" class="nav nav-tabs">
-        <li role="presentation" class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-            Options<span class="caret"></span>
-          </a>
-          <ul class="dropdown-menu">
-            <li class="text-center"><a href="javascript:void(0);">View Template</a></li>
-            <li class="text-center"><a href="javascript:void(0);">Copy Header</a></li>
-            <li class="text-center"><a href="javascript:void(0);">Copy Footer</a></li>
-          </ul>
-        </li>
-      </ul>
+      
     </div>
   </div>
   <div class="row">

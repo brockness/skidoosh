@@ -91,6 +91,8 @@ var email_maker_app = {
           } else {
             if( $(this).attr('name') != 'img_link' ) {
               self.settings.formTest = 1;
+            } else {
+              inputObj[$(this).attr('name').toLowerCase()] = $(this).val();
             }
           }
         });
@@ -134,15 +136,12 @@ var email_maker_app = {
 
   downloadMarkup : function () {
     if( this.settings.header != '' && this.settings.footer != '' && this.data.length > 0 ) {
-      head = document.getElementById('payload').contentWindow.document.head;
-      body = document.getElementById('payload').contentWindow.document.body;
-      docObj = document.getElementById('payload').contentWindow.document;
-      console.log(docObj);
-      payloadStr = '<!doctype><html><head>' + $(head).html() + '<head><body>' + $(body).html() + '</body></html>';
-      console.log('head',$(head).html());
-      // emailDoc = new Blob([payloadStr], {type: 'text/html'});
-      anchorObj = document.createElement('a')
-      anchorObj.href = payloadStr;
+      docObj = document.getElementById('payload').contentWindow.document.documentElement.innerHTML;
+      payloadStr = "<!doctype html><html>" + docObj + "</html>";
+      blob = new Blob([payloadStr], {type: "text/html"});
+      url = window.URL.createObjectURL(blob);
+      anchorObj = document.createElement('a');
+      anchorObj.href = url;
       anchorObj.download = 'example_test.html';
       anchorObj.click();
     } else {
